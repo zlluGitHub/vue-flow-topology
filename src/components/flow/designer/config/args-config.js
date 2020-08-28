@@ -59,7 +59,7 @@ export let flowConfig = {
 		}
 	},
 	defaultStyle: {
-		dragOpacity: 0.7,
+		dragOpacity: 0.9,
 		alignGridPX: [5, 5],
 		alignSpacing: {
 			level: 100,
@@ -116,6 +116,11 @@ export let flowConfig = {
 			code: 190,
 			codeName: '<',
 			shortcutName: '放大工具',
+		},
+		deleteTool: {
+			code: 46,
+			codeName: 'C',
+			shortcutName: '删除',
 		},
 		zoomOutTool: {
 			code: 188,

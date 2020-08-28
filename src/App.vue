@@ -1,14 +1,22 @@
 <template>
-  <div id="app" style="height: 99%;">
-    <router-view/>
+  <div id="app">
+      <router-view/>
   </div>
 </template>
 
 <script>
+// import HelloWorld from './components/HelloWorld.vue'
+
 export default {
-  name: 'App'
+  name: 'App',
+  // components: {
+  //   HelloWorld
+  // }
 }
 </script>
 
 <style>
+#app {
+ height: 100%;
+}
 </style>

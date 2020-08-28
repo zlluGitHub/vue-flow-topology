@@ -1,5 +1,24 @@
+# vue-flow-topology
 
+## Project setup
+```
+npm install
+```
 
-#### Flow Topology
-Flow Topology 是基于Vue-cli3.0 + Ant Design Vue + JSPlumb开发的一个大数据流水线拓展流程工作台，该项目可以看做是一个独立的 Vue 项目，也可以嵌入到其他vue项目中使用，新版会作为优先版本持续迭代。
+### Compiles and hot-reloads for development
+```
+npm run serve
+```
 
+### Compiles and minifies for production
+```
+npm run build
+```
+
+### Lints and fixes files
+```
+npm run lint
+```
+
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).

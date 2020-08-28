@@ -37,7 +37,7 @@
     @click.stop="selectNode"
     @contextmenu.stop="showNodeContextMenu"
   >
-    <a-icon type="user" class="node-icon" />
+    <a-icon :type="node.icon" class="node-icon" />
     {{ node.nodeName }}
   </div>
 
@@ -53,7 +53,7 @@
     @click.stop="selectNode"
     @contextmenu.stop="showNodeContextMenu"
   >
-    <a-icon type="sync" class="node-icon" />
+    <a-icon :type="node.icon" class="node-icon" />
     {{ node.nodeName }}
   </div>
 
@@ -95,7 +95,7 @@
     @click.stop="selectNode"
     @contextmenu.stop="showNodeContextMenu"
   >
-    <a-icon type="api" class="node-icon" />
+    <a-icon :type="node.icon" class="node-icon" />
     {{ node.nodeName }}
   </div>
 
@@ -134,7 +134,104 @@
       <span class="lane-text">{{ node.nodeName }}</span>
     </div>
   </div>
+  <!-- 新增内容开始 -->
 
+  <div
+    v-else-if="node.type == 'processor'"
+    :id="node.id"
+    class="common-processor-node"
+    :class="{ active: isActive() }"
+    :style="{ top: node.y + 'px', left: node.x + 'px', 
+    		cursor: currentTool.type == 'drag' ? 'move' : (currentTool.type == 'connection' ? 'crosshair' : 
+    																								(currentTool.type == 'zoom-in' ? 'zoom-in' : 
+    																								(currentTool.type == 'zoom-out' ? 'zoom-out' : 'default'))) }"
+    @click.stop="selectNode"
+    @contextmenu.stop="showNodeContextMenu"
+  >
+    <div class="title">
+      <p>
+        <a-icon :type="node.icon" class="node-icon" />
+        <span>{{ node.nodeName }}</span>
+      </p>
+      <em></em>
+    </div>
+
+    <ul class="warp">
+      <li>
+        <p>
+          <b>In</b>
+          <span>(0 bytes)</span>
+        </p>
+        <span>5min</span>
+      </li>
+      <li>
+        <p>
+          <b>Read/Write</b>
+          <span>0 bytes / 0 bytes</span>
+        </p>
+        <span>5min</span>
+      </li>
+      <li>
+        <p>
+          <b>Out</b>
+          <span>(0 bytes)</span>
+        </p>
+        <span>5min</span>
+      </li>
+      <li>
+        <p>
+          <b>Tasks/Time</b>
+          <span>0 / 00:00:00.000</span>
+        </p>
+        <span>5min</span>
+      </li>
+    </ul>
+  </div>
+  <div
+    v-else-if="node.type == 'in'"
+    :id="node.id"
+    class="common-in-node"
+    :class="{ active: isActive() }"
+    :style="{ top: node.y + 'px', left: node.x + 'px', 
+    		cursor: currentTool.type == 'drag' ? 'move' : (currentTool.type == 'connection' ? 'crosshair' : 
+    																								(currentTool.type == 'zoom-in' ? 'zoom-in' : 
+    																								(currentTool.type == 'zoom-out' ? 'zoom-out' : 'default'))) }"
+    @click.stop="selectNode"
+    @contextmenu.stop="showNodeContextMenu"
+  >
+    <div class="title">
+      <p>
+        <a-icon :type="node.icon" class="node-icon" />
+        <span>{{ node.nodeName }}</span>
+      </p>
+      <em></em>
+    </div>
+
+    <div class="warp">输出内容</div>
+  </div>
+  <div
+    v-else-if="node.type == 'out'"
+    :id="node.id"
+    class="common-out-node"
+    :class="{ active: isActive() }"
+    :style="{ top: node.y + 'px', left: node.x + 'px', 
+    		cursor: currentTool.type == 'drag' ? 'move' : (currentTool.type == 'connection' ? 'crosshair' : 
+    																								(currentTool.type == 'zoom-in' ? 'zoom-in' : 
+    																								(currentTool.type == 'zoom-out' ? 'zoom-out' : 'default'))) }"
+    @click.stop="selectNode"
+    @contextmenu.stop="showNodeContextMenu"
+  >
+    <div class="title">
+      <p>
+        <a-icon :type="node.icon" class="node-icon" />
+        <span>{{ node.nodeName }}</span>
+      </p>
+      <em></em>
+    </div>
+     <div class="warp">输出内容</div>
+  </div>
+
+  <!-- 结束 -->
   <div v-else></div>
 </template>
 
@@ -170,7 +267,7 @@ export default {
         containment: "parent",
         handle: function (e, el) {
           var possibles = el.parentNode.querySelectorAll(
-            ".common-circle-node,.common-rectangle-node,.common-diamond-node,.lane-text-div"
+            ".common-circle-node,.common-rectangle-node,.common-diamond-node,.lane-text-div,.common-processor-node,.common-in-node,.common-out-node"
           );
           for (var i = 0; i < possibles.length; i++) {
             if (possibles[i] === el || e.target.className == "lane-text")
@@ -261,6 +358,6 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import "../style/flow-node.scss";
 </style>

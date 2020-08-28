@@ -1,28 +1,40 @@
-$primary-color: #409EFF;
+$primary-color: #409eff;
 
 .container {
     border: 2px solid #e4e7ed;
     height: 100%;
-    
+
     moz-user-select: -moz-none;
     -moz-user-select: none;
-    -o-user-select:none;
-    -khtml-user-select:none;
-    -webkit-user-select:none;
-    -ms-user-select:none;
-    user-select:none;
+    -o-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
-
+.logo {
+    height: 36px;
+    line-height: 36px;
+    padding: 0 15px;
+    h1 {
+        font-size: 20px;
+    }
+    border-bottom: 1px solid #eee;
+}
 .select-area {
     border-right: 1px solid #e4e7ed;
 }
 
 .header-option {
-    background: white;
+    // background-color: rgb(170,187,195);
+    display: flex;
+    align-items: center;
+    background: transparent;
     height: 36px;
     line-height: 36px;
-    border-bottom: 2px solid #e4e7ed;
-    text-align: right;
+    padding: 0;
+    // border-bottom: 2px solid #e4e7ed;
+    // text-align: right;
 }
 
 .header-option-button {
@@ -33,7 +45,7 @@ $primary-color: #409EFF;
 .content {
     background: #fafafa;
     height: 100%;
-    border: 1px dashed rgba(170,170,170,0.7);
+    border: 1px dashed rgba(170, 170, 170, 0.7);
 }
 
 .ant-layout-footer {
@@ -60,11 +72,11 @@ $primary-color: #409EFF;
     padding-left: 8px;
     text-align: center;
     cursor: pointer;
-    
-    &:hover{
+
+    &:hover {
         background: #d2d3d6;
     }
-    
+
     &.active {
         background: black;
     }
@@ -74,13 +86,13 @@ $primary-color: #409EFF;
     background: #f4f6fc;
     height: 32px;
     line-height: 32px;
-    margin: 5px;
+    margin: 5px 0;
     padding-left: 8px;
     text-align: left;
     cursor: move;
     min-width: 120px;
-    
-    &:hover{
+    border: 1px dashed #ddd ;
+    &:hover {
         color: $primary-color;
         outline: 1px dashed $primary-color;
     }
@@ -92,9 +104,84 @@ $primary-color: #409EFF;
 
 .linkLabel {
     background-color: white;
-    padding: 1px;
+    padding: 2px 8px;
     border: 1px solid #346789;
-    border-radius: 5px;
-    opacity: 0.8;
+    // border-radius: 5px;
+    font-size: 12px;
+    opacity: 0.9;
     z-index: 3;
+}
+
+.collapse {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    border-bottom: 1px solid #eee;
+    border-top: 1px solid #eee;
+    margin-top: 2px;
+    // margin-bottom: 10px;
+    cursor: pointer;
+    p {
+        margin: 0;
+        i {
+            margin-right: 10px;
+        }
+    }
+}
+
+.ant-list-item {
+    margin: 5px 15px !important;
+}
+.content-header {
+    background: #fff;
+    display: flex;
+    padding: 0px 50px;
+    justify-content: space-between;
+    .header-left {
+        display: flex;
+        align-items: center;
+        header {
+            border-right: 1px solid #eee;
+            padding-right: 40px;
+            padding-left: 10px;
+        }
+        .header-warp {
+            display: flex;
+            align-items: center;
+        }
+        .item-active {
+            // background:transparent;
+            min-width: 35px;
+            height: 22px;
+            line-height: 22px;
+            margin: 2px;
+        }
+    }
+}
+.jv-container.boxed:hover {
+    box-shadow: none;
+}
+
+.bar-arrow-left,
+.bar-arrow-right {
+    position: absolute;
+    top: 50%;
+
+    background: #fff;
+    padding: 30px 5px;
+    z-index: 10;
+    border: 1px solid #ddd;
+
+    cursor: pointer;
+}
+.bar-arrow-left {
+    right: -27px;
+    border-left: 0;
+    border-radius: 0 8px 8px 0;
+}
+.bar-arrow-right {
+    left: -27px;
+    border-right: 0;
+    border-radius: 8px 0 0 8px;
 }

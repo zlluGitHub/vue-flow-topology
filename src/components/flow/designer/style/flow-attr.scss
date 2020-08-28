@@ -1,3 +1,28 @@
+.flow-attr{
+   .attr-active{
+       padding-bottom: 20px;
+       ul{
+           list-style: none;
+           padding: 0;
+           margin: 0;
+           border-bottom: 1px solid #ddd;
+           display: flex;
+            padding: 0 40px;
+            padding-bottom: 10px;
+           li{
+                    padding: 5px 10px;
+                    margin: 10px;
+                    border: 1px solid #0048495e;
+                    cursor: pointer;
+                    color: #004849;
+           }
+           li:hover{
+            border: 1px solid #004849; 
+           }
+       }
+   } 
+}
+
 .ant-form-item {
     margin-bottom: 6px;
 }

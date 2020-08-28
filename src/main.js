@@ -1,22 +1,21 @@
-// The Vue build version to load with the `import` command
-// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
-import Antd from 'ant-design-vue'
-import App from './App'
-import 'ant-design-vue/dist/antd.css';
-import router from './router'
-import VueContextMenu from 'vue-contextmenu'
-import vcolorpicker from 'vcolorpicker'
-Vue.config.productionTip = false
+import App from './App.vue'
 
+import Antd from 'ant-design-vue'
+import 'ant-design-vue/dist/antd.css';
 Vue.use(Antd)
+
+import router from './router'
+
+import VueContextMenu from 'vue-contextmenu'
 Vue.use(VueContextMenu)
+
+import vcolorpicker from 'vcolorpicker'
 Vue.use(vcolorpicker)
 
-/* eslint-disable no-new */
+Vue.config.productionTip = false
+
 new Vue({
-  el: '#app',
   router,
-  components: { App },
-  template: '<App/>'
-})
+  render: h => h(App),
+}).$mount('#app')
