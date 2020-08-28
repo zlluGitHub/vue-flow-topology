@@ -250,6 +250,7 @@
         <div class="bar-arrow-right" @click="handleShrink('right')">
           <a-icon :type="siderRightWidth===0?'double-left':'double-right'" />
         </div>
+        <ShortcutList v-if="siderRightWidth"/>
       </a-layout-sider>
     </a-layout>
     <a-modal
@@ -308,19 +309,21 @@ import SettingModal from "./modules/SettingModal";
 import ShortcutModal from "./modules/ShortcutModal";
 import UsingDocModal from "./modules/UsingDocModal";
 import TestModal from "./modules/TestModal";
+import ShortcutList from "./modules/ShortcutList";
 
 export default {
   name: "flow",
   components: {
     jsplumb,
     flowConfig,
-    html2canvas,
-    canvg,
+    // html2canvas,
+    // canvg,
     FlowArea,
     FlowAttr,
     SettingModal,
     ShortcutModal,
     UsingDocModal,
+    ShortcutList,
     TestModal,
     StartIcon: { template: startSvg },
     EndIcon: { template: endSvg },
@@ -364,8 +367,8 @@ export default {
   data() {
     return {
       lineObj: { name: "流程图线", type: "Flowchart" },
-      siderLeftWidth: 300,
-      siderRightWidth: 350,
+      siderLeftWidth: 280,
+      siderRightWidth: 300,
       info: {
         version: "1.0.0",
         author: "zll",
@@ -455,10 +458,10 @@ export default {
     },
     handleShrink(mark) {
       if (mark === "left") {
-        this.siderLeftWidth = this.siderLeftWidth == 0 ? 300 : 0;
+        this.siderLeftWidth = this.siderLeftWidth == 0 ? 280 : 0;
         this.initNodeSelectArea();
       } else {
-        this.siderRightWidth = this.siderRightWidth == 0 ? 350 : 0;
+        this.siderRightWidth = this.siderRightWidth == 0 ? 300 : 0;
       }
     },
     handleSetFlowType(v) {
@@ -853,13 +856,12 @@ export default {
       let $Container = that.$refs.flowArea.$el.children[0],
         svgElems = $($Container).find('svg[id^="link-"]'),
         removeArr = [];
-
       svgElems.each(function (index, svgElem) {
+        
         let linkCanvas = document.createElement("canvas");
         let canvasId = "linkCanvas-" + ZFSN.getId();
         linkCanvas.id = canvasId;
         removeArr.push(canvasId);
-
         let svgContent = svgElem.outerHTML.trim();
         canvg(linkCanvas, svgContent);
         if (svgElem.style.position) {

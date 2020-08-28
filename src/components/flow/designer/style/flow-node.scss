@@ -3,6 +3,7 @@ $common-node-bg-hover: #f4f6fcb0;
 $common-node-active: #409eff;
 
 #flowContainer {
+    font-size: 12px;
     .common-circle-node {
         position: absolute;
         height: 50px;
@@ -13,7 +14,7 @@ $common-node-active: #409eff;
         border-radius: 50%;
         background-color: $common-node-bg;
         white-space: nowrap;
-
+        font-size: 12px;
         &:hover {
             background-color: $common-node-bg-hover;
             z-index: 2;
@@ -35,7 +36,7 @@ $common-node-active: #409eff;
         border-radius: 2px;
         background-color: $common-node-bg;
         white-space: nowrap;
-
+        font-size: 12px;
         &:hover {
             background-color: $common-node-bg-hover;
             z-index: 2;
@@ -58,7 +59,7 @@ $common-node-active: #409eff;
         background-color: $common-node-bg;
         transform: rotate(45deg);
         white-space: nowrap;
-
+        font-size: 12px;
         &:before {
             position: absolute;
             content: "网关";
@@ -86,7 +87,7 @@ $common-node-active: #409eff;
         border: 1px solid #777;
         border-radius: 2px;
         z-index: -1;
-
+        font-size: 12px;
         &.active {
             outline: 2px dashed $common-node-active;
             outline-offset: 0px;
@@ -108,7 +109,6 @@ $common-node-active: #409eff;
                 word-wrap: break-word;
                 display: table-cell;
                 vertical-align: middle;
-                font-size: 0.8em;
             }
         }
     }
@@ -119,7 +119,7 @@ $common-node-active: #409eff;
         border: 1px solid #777;
         border-radius: 2px;
         z-index: -1;
-
+        font-size: 12px;
         &.active {
             outline: 2px dashed $common-node-active;
             outline-offset: 0px;
@@ -140,7 +140,6 @@ $common-node-active: #409eff;
             .lane-text {
                 word-wrap: break-word;
                 display: table-cell;
-                font-size: 0.8em;
             }
         }
     }
@@ -198,7 +197,7 @@ $common-node-active: #409eff;
         list-style: none;
         margin: 0;
         padding: 5px 0;
-
+        font-size: 12px;
         li {
             display: flex;
             justify-content: space-between;

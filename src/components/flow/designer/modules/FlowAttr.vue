@@ -229,7 +229,7 @@
             <ul>
               <li><a-icon type="setting" /></li>
               <li><a-icon type="interaction" /></li>
-              <li><a-icon type="delete" /></li>
+              <!-- <li><a-icon type="delete" /></li> -->
               <li><a-icon type="deployment-unit" /></li>
               <li><a-icon type="play-square" /></li>
             </ul>

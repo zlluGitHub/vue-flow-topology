@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "ant-design-vue": "^1.6.5",
-    "canvg": "^3.0.6",
+    "canvg": "^2.0.0",
     "core-js": "^3.6.5",
     "html2canvas": "^1.0.0-rc.7",
     "jquery": "^3.5.1",

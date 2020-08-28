@@ -1,4 +1,6 @@
 .flow-attr{
+    height: 100%;
+    overflow:hidden;
    .attr-active{
        padding-bottom: 20px;
        ul{
@@ -20,6 +22,9 @@
             border: 1px solid #004849; 
            }
        }
+   }
+   .ant-tabs{
+    position: static;
    } 
 }
 
