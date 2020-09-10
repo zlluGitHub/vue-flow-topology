@@ -22,7 +22,7 @@ module.exports = {
     }
   },
   // 根域上下文目录
-  publicPath: '/topology', // publicPath:'/rm', 这里可以设置二级文件夹作为主页面
+  // publicPath: '/topology', // publicPath:'/rm', 这里可以设置二级文件夹作为主页面
 
   // devServer: {
   //   port: 8080,
@@ -32,9 +32,7 @@ module.exports = {
   //   // host: "localhost",
   //   proxy: {
   //     '/piflow': {
-  //       target: 'http://10.0.85.80:6002/piflow-web',
-  //       // target: 'http://10.0.85.80:6002/piflow-web/admin',
-  //       // target: 'http://10.0.85.82:6001',
+  //       target: ' ',
   //       changeOrigin: true,
   //       ws: true, // 是否启用websockets
   //       secure: false, // 使用的是http协议则设置为false，https协议则设置为true
