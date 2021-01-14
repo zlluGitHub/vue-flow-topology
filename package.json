@@ -1,36 +1,35 @@
 {
-  "name": "vue-flow-topology",
+  "name": "flow",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "vue-cli-service serve",
+    "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "ant-design-vue": "^1.6.5",
-    "canvg": "^2.0.0",
     "core-js": "^3.6.5",
-    "html2canvas": "^1.0.0-rc.7",
-    "jquery": "^3.5.1",
-    "jquery-ui": "^1.12.1",
-    "jsplumb": "^2.14.5",
-    "node-sass": "^4.14.1",
-    "sass-loader": "^10.0.1",
-    "vcolorpicker": "^1.0.1",
+    "events": "^3.2.0",
+    "jsplumb": "^2.15.5",
+    "register-service-worker": "^1.7.1",
+    "uuid": "^8.3.2",
+    "view-design": "^4.4.0",
     "vue": "^2.6.11",
-    "vue-contextmenu": "^1.5.10",
-    "vue-json-viewer": "^2.2.14",
-    "vue-router": "^3.4.3"
+    "vue-router": "^3.2.0",
+    "vuex": "^3.4.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-eslint": "~4.5.0",
+    "@vue/cli-plugin-pwa": "~4.5.0",
+    "@vue/cli-plugin-router": "~4.5.0",
+    "@vue/cli-plugin-vuex": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
     "babel-eslint": "^10.1.0",
-    "compression-webpack-plugin": "^5.0.1",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
+    "node-sass": "^4.12.0",
+    "sass-loader": "^8.0.2",
     "vue-template-compiler": "^2.6.11"
   },
   "eslintConfig": {
