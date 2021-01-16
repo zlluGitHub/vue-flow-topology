@@ -1,9 +1,9 @@
 <template>
   <div class="index" id="zll-index">
-    <div class="aside-left">
-      <header id="aside-left-header">flow</header>
+    <div class="flow-menu">
+      <header>Vue Flow Topology</header>
       <div class="section">
-        <AsideLeft />
+        <flow-menu />
       </div>
     </div>
     <div class="middle">
@@ -11,7 +11,7 @@
         <ul>
           <li
             v-for="(item, i) in middleMenu"
-            @click="handleMiddleMenu(item, i)"
+            @click="handleMiddleMenu(item.type, i)"
             :key="'middle-menu-' + i"
             :class="[middleSelectType === item.type ? 'active' : '']"
           >
@@ -36,19 +36,20 @@
 </template>
 
 <script>
-import AsideLeft from "@/components/AsideLeft";
+import FlowMenu from "@/components/FlowMenu";
 import AsideRight from "@/components/AsideRight";
 import FlowContent from "@/components/FlowContent";
 export default {
   name: "Index",
   components: {
-    AsideLeft,
+    FlowMenu,
     FlowContent,
     AsideRight,
   },
   data() {
     return {
-      middleSelectType: "drag-drop",
+      middleSelectType: "drag-drop", //操作类型
+      connector: "Bezier", //连接线的样式
       middleMenu: [
         {
           icon: "ios-undo",
@@ -98,9 +99,10 @@ export default {
     };
   },
   methods: {
-    handleMiddleMenu(obj, i) {
-      this.middleSelectType = obj.type;
-      this.$store.commit("setFlowMenuObj", obj);
+    handleMiddleMenu(type, i, connector) {
+      this.middleSelectType = type;
+      this.connector = connector;
+      this.$store.commit("setFlowMenuObj", { type, connector });
     },
   },
 };
@@ -125,7 +127,7 @@ export default {
       list-style: none;
     }
   }
-  .aside-left {
+  .flow-menu {
     width: 280px;
   }
   .middle {
@@ -142,13 +144,12 @@ export default {
           &.active {
             color: #2d8cf0;
           }
-          >ol{
+          > ol {
             list-style: none;
             position: absolute;
             top: 30px;
             font-size: 12px;
-            li{
-
+            li {
             }
           }
         }

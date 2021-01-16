@@ -8,10 +8,11 @@
             v-for="(node, n) in item.child"
             :key="'key-' + 'i-' + n"
             :id="node.type + '-' + i + '-' + n"
-            :class="item.class"
             @mousedown="handlerMousedown($event, node, i, n)"
           >
-            <MenuNode :class="['menu-node', node.type]" :node="node" />
+            <div :id="'node-' + i + '-' + n">
+              <MenuNode :class="['menu-node', node.type]" :node="node" />
+            </div>
           </li>
         </ol>
       </li>
@@ -21,7 +22,7 @@
 <script>
 import MenuNode from "./modules/MenuNode";
 export default {
-  name: "aside-left",
+  name: "FlowMenu",
   components: { MenuNode },
   data() {
     return {
@@ -30,7 +31,6 @@ export default {
       menuList: [
         {
           name: "基础节点",
-          class: "base-warp",
           child: [
             {
               name: "起始节点",
@@ -41,18 +41,17 @@ export default {
               type: "end-node",
             },
             {
-              name: "输入节点",
+              name: "输入",
               type: "in-node",
             },
             {
-              name: "输出节点",
+              name: "输出",
               type: "out-node",
             },
           ],
         },
         {
           name: "组合节点",
-          class: "combination-warp",
           child: [
             {
               name: "基础配置",
@@ -62,17 +61,12 @@ export default {
             {
               name: "抽离模块",
               type: "codepen-node",
-              icon: "logo-codepen",
+              icon: "md-cube",
             },
             {
               name: "进程监听",
               type: "pulse-node",
               icon: "md-pulse",
-            },
-            {
-              name: "关联模块",
-              type: "link-node",
-              icon: "ios-link",
             },
           ],
         },
@@ -102,9 +96,22 @@ export default {
   methods: {
     handlerMousedown(e, item, i, n) {
       let event = e || window.event || event;
-      let offsetY = 0;
-      this.$store.commit("setNewNode", { state: true, node: item });
-      let node = document.querySelector("#" + item.type + "-" + i + "-" + n);
+      let offsetLeft = document.getElementById(`node-${i + "-" + n}`).offsetLeft;
+      let offsetTop = document.getElementById(`node-${i + "-" + n}`).offsetTop;
+      this.$store.commit("setNewNode", {
+        state: true,
+        node: Object.assign(
+          {
+            name: item.name,
+            type: item.type,
+          },
+          {
+            x: event.clientX - offsetLeft,
+            y: event.clientY - offsetTop,
+          }
+        ),
+      });
+      let node = document.getElementById(item.type + "-" + i + "-" + n);
       this.nodePosition = {
         offsetX: event.x - node.offsetLeft,
         offsetY: event.y - node.offsetTop,
@@ -121,7 +128,7 @@ export default {
 
 <style scoped lang="scss">
 aside {
-  padding: 20px;
+  padding: 0px;
   > ul {
     list-style: none;
     > li {
@@ -129,8 +136,13 @@ aside {
       font-size: 12px;
       .menu-title {
         width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-top: 1px solid #eee;
+        border-bottom: 1px solid #eee;
+        margin-top: 10px;
+        font-size: 14px;
       }
-
       > ol {
         list-style: none;
         display: flex;
@@ -140,82 +152,15 @@ aside {
           z-index: 1;
           opacity: 0.5;
         }
-      }
-    }
-  }
-  // 基础节点
-  li.base-warp {
-    width: 120px;
-    > div {
-      cursor: move;
-      padding: 15px 25px;
-      margin: 10px;
-      user-select: none;
-      background: #abc7ff31;
-      border: 1px solid #abc7ff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    &#start-node-0-0 {
-      > div {
-        border-radius: 30px;
-      }
-    }
-    &#in-node-0-2 {
-      > div {
-        padding: 0;
-        width: 60px;
-        height: 60px;
-        margin-left: 28px;
-      }
-      // clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
-      // transition: 1s clip-path 1px solid #abc7ff;
-    }
-    &#out-node-0-3 {
-      > div {
-        padding: 0;
-        width: 65px;
-        height: 65px;
-        margin-left: 22px;
-        border-radius: 100%;
-      }
-    }
-  }
-
-  // 组合节点
-  li.combination-warp {
-    width: 240px;
-    > div {
-      cursor: move;
-      padding: 10px;
-      margin: 10px;
-      user-select: none;
-      background: #abc7ff31;
-      border: 1px solid #abc7ff;
-    }
-    &#start-node-0-0 {
-      > div {
-        border-radius: 30px;
-      }
-    }
-    &#in-node-0-2 {
-      > div {
-        padding: 0;
-        width: 60px;
-        height: 60px;
-        margin-left: 28px;
-      }
-      // clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
-      // transition: 1s clip-path 1px solid #abc7ff;
-    }
-    &#out-node-0-3 {
-      > div {
-        padding: 0;
-        width: 65px;
-        height: 65px;
-        margin-left: 22px;
-        border-radius: 100%;
+        > li {
+          > div {
+            margin: 10px 20px;
+            cursor: move;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
+        }
       }
     }
   }

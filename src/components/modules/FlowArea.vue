@@ -7,7 +7,7 @@
       :node="node"
       :style="{ top: node.y + 'px', left: node.x + 'px', cursor }"
     >
-      <p @mousedown="handlerNodeClick($event, node)">{{ node.name }}</p>
+      <!-- <p @mousedown="handlerNodeClick($event, node)">{{ node.name }}</p> -->
     </flow-node>
   </div>
 </template>
@@ -68,7 +68,6 @@ export default {
       }
     },
     handlerMouseup(e) {
-      console.log(e);
       if (this.$store.state.newNode.state) {
         this.nodes = this.addNewNode(e, this.$store.state.newNode.node);
         this.$nextTick(() => {
@@ -152,17 +151,21 @@ export default {
       });
     },
     addNewNode(e, node) {
-      // let { nodes, links } = this.$store.state.flowData;
+      console.log(node);
       let newNode = [...this.$store.state.flowData.nodes];
-      console.log(newNode);
-      newNode.push({
-        ...node,
-        ...{
-          id: getUUID(),
-          x: e.offsetX,
-          y: e.offsetY,
-        },
-      });
+      newNode.push(
+        Object.assign(
+          {
+            name: node.name,
+            type: node.type,
+          },
+          {
+            id: getUUID(),
+            x: e.offsetX - node.x,
+            y: e.offsetY - node.y,
+          }
+        )
+      );
       this.$store.commit("setFlowData", { nodes: newNode });
       return newNode;
     },
