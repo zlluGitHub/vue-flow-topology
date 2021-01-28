@@ -1,26 +1,26 @@
 
-const CompressionPlugin = require("compression-webpack-plugin")
+// const CompressionPlugin = require("compression-webpack-plugin")
 module.exports = {
-  configureWebpack: config => {
-    if (process.env.NODE_ENV === 'production') { // 去掉console.log
-      config.optimization.minimizer[0].options.terserOptions.compress.warnings = false
-      config.optimization.minimizer[0].options.terserOptions.compress.drop_console = true
-      config.optimization.minimizer[0].options.terserOptions.compress.drop_debugger = true
-      config.optimization.minimizer[0].options.terserOptions.compress.pure_funcs = ['console.log']
-    }
+  // configureWebpack: config => {
+  //   if (process.env.NODE_ENV === 'production') { // 去掉console.log
+  //     config.optimization.minimizer[0].options.terserOptions.compress.warnings = false
+  //     config.optimization.minimizer[0].options.terserOptions.compress.drop_console = true
+  //     config.optimization.minimizer[0].options.terserOptions.compress.drop_debugger = true
+  //     config.optimization.minimizer[0].options.terserOptions.compress.pure_funcs = ['console.log']
+  //   }
 
-    if (process.env.NODE_ENV === 'production') {
-      return {
-        plugins: [
-          new CompressionPlugin({
-            test: /\.js$|\.html$|\.css/, //匹配文件名
-            threshold: 10240,//对超过10k的数据压缩
-            deleteOriginalAssets: false //不删除源文件
-          })
-        ]
-      }
-    }
-  },
+  //   if (process.env.NODE_ENV === 'production') {
+  //     return {
+  //       plugins: [
+  //         new CompressionPlugin({
+  //           test: /\.js$|\.html$|\.css/, //匹配文件名
+  //           threshold: 10240,//对超过10k的数据压缩
+  //           deleteOriginalAssets: false //不删除源文件
+  //         })
+  //       ]
+  //     }
+  //   }
+  // },
   // 根域上下文目录
   // publicPath: '/topology', // publicPath:'/rm', 这里可以设置二级文件夹作为主页面
 
