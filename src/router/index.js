@@ -1,29 +1,15 @@
 import Vue from 'vue'
-import VueRouter from 'vue-router'
-import Index from '../views/Index.vue'
+import Router from 'vue-router'
 
-Vue.use(VueRouter)
+Vue.use(Router)
 
-const routes = [
-  {
-    path: '/',
-    name: 'Index',
-    component: Index
-  },
-  // {
-  //   path: '/about',
-  //   name: 'About',
-  //   // route level code-splitting
-  //   // this generates a separate chunk (about.[hash].js) for this route
-  //   // which is lazy-loaded when the route is visited.
-  //   component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  // }
-]
-
-const router = new VueRouter({
-  mode: 'history',
-  base: process.env.BASE_URL,
-  routes
+export default new Router({
+  mode: 'hash', //默认 有#号
+  routes: [
+    {
+      path: '/',
+      name: 'flow',
+      component: () => import('../components/flow/designer/FlowDesigner')
+    }
+  ]
 })
-
-export default router

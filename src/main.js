@@ -1,18 +1,21 @@
 import Vue from 'vue'
 import App from './App.vue'
-import './registerServiceWorker'
+
+import Antd from 'ant-design-vue'
+import 'ant-design-vue/dist/antd.css';
+Vue.use(Antd)
+
 import router from './router'
-import store from './store'
-import ViewUI from 'view-design';
-import 'view-design/dist/styles/iview.css';
 
-import events from "./utils";
-Vue.prototype.$events = events;
+import VueContextMenu from 'vue-contextmenu'
+Vue.use(VueContextMenu)
 
-Vue.config.productionTip = false;
-Vue.use(ViewUI);
+import vcolorpicker from 'vcolorpicker'
+Vue.use(vcolorpicker)
+
+Vue.config.productionTip = false
+
 new Vue({
   router,
-  store,
-  render: h => h(App)
+  render: h => h(App),
 }).$mount('#app')
