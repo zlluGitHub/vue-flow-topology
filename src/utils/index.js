@@ -1,5 +1,3 @@
-import { EventEmitter } from 'events';
-export const events = new EventEmitter();
 function S4() {
 	return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
 }
@@ -19,6 +17,4 @@ export const getUUID = () => {
 	return (S4() + S4() + "-" + S4() + "-" + S4());
 }
 
-export default {
-	events, getUUID
-}
+export default { getUUID }

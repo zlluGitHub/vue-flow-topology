@@ -17,34 +17,7 @@
 <script>
 export default {
   name: "contextmenu",
-  // data() {
-  //   return {
-  //     nodes: [],
-  //   };
-  // },
   props: ["type"],
-  mounted() {
-    // let menu = this.$refs.menu;
-    // document.oncontextmenu = function (ev) {
-    //   // let ev = ev || event;
-    //   // let scrollTop =
-    //   //   document.documentElement.scrollTop || document.body.scrollTop;
-    //   // menu.style.display = "block";
-    //   // let zoom = 1;
-    //   // if (screen.width > 1300) {
-    //   //   // let zoom = 0.9;
-    //   // }
-    //   // menu.style.left = ev.clientX * zoom + "px";
-    //   // //当滑动滚动条时也能准确获取菜单位置
-    //   // menu.style.top = (ev.clientY + scrollTop) * zoom + "px";
-    //   //阻止默认事件
-    //   return false;
-    // };
-    // let app = document.querySelector("body");
-    // app.onclick = function(params) {
-    //   menu.style.display = "none";
-    // };
-  },
   methods: {
     handleClick(type, event) {
       this.$emit("on-click", { type, event });

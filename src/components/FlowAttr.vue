@@ -118,13 +118,13 @@
 </template>
 
 <script>
-import jsp from "jsplumb";
 export default {
   name: "FlowAttr",
   data() {
     return {
       content: {},
       type: "",
+      jspInit: this.$store.state.jspInit,
     };
   },
   computed: {
@@ -134,7 +134,6 @@ export default {
   },
   watch: {
     selectContent(data) {
-      console.log(data);
       this.content = data.data;
       this.type = data.type;
     },
@@ -145,7 +144,7 @@ export default {
   methods: {
     linkLabelChange(e) {
       let label = e.target.value;
-      let conn = jsp.jsPlumb.getConnections({
+      let conn = this.jspInit.getConnections({
         source: this.content.sourceId,
         target: this.content.targetId,
       })[0];

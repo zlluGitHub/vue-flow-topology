@@ -38,6 +38,7 @@
 </template>
 
 <script>
+import jsp from "jsplumb";
 import HeaderOperate from "@/components/modules/HeaderOperate";
 import HeaderAttr from "@/components/modules/HeaderAttr";
 import FlowMenu from "@/components/FlowMenu";
@@ -71,6 +72,9 @@ export default {
         this.isJsonView = true;
       }
     },
+  },
+  created() {
+    this.$store.commit("setJspInit", jsp.jsPlumb.getInstance({ Container: "zll-index" }));
   },
   mounted() {
     this.jsonData = this.$store.state.flowData;

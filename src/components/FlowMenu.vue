@@ -73,9 +73,6 @@ export default {
       ],
     };
   },
-  props: {
-    msg: String,
-  },
   mounted() {
     document.querySelector("#zll-index").onmousemove = (e) => {
       let event = e || window.event || event;

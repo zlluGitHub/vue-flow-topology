@@ -47,9 +47,7 @@ export default {
   },
   props: ["node"],
   mounted() {},
-  methods: {
-    handlerMousedown(e, item, i, n) {},
-  },
+  methods: {},
 };
 </script>
 

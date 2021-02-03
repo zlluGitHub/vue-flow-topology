@@ -97,7 +97,7 @@ export const jsPlumbConfig = {
 }
 // 节点默认参数
 export const nodePrame = {
-	data: null
+	// data: null
 }
 // 连线默认参数
 export const linkPrame = {

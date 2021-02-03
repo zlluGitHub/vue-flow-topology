@@ -9,10 +9,8 @@
   },
   "dependencies": {
     "core-js": "^3.6.5",
-    "events": "^3.2.0",
     "jsplumb": "^2.15.5",
     "register-service-worker": "^1.7.1",
-    "uuid": "^8.3.2",
     "view-design": "^4.4.0",
     "vue": "^2.6.11",
     "vue-json-viewer": "^2.2.18",

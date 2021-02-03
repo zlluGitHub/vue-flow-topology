@@ -14,7 +14,6 @@
 
 <script>
 import FlowNode from "./FlowNode";
-import jsp from "jsplumb";
 import { jsPlumbConfig, flowAnchor, nodePrame, linkPrame } from "@/config/flow.config.js";
 import { getUUID } from "@/utils";
 export default {
@@ -22,131 +21,121 @@ export default {
   components: { FlowNode },
   data() {
     return {
+      jspInit: this.$store.state.jspInit,
       nodes: [],
       cursor: "move",
       connector: "",
     };
   },
-  props: {
-    msg: String,
-  },
-  mounted() {
-    this.initFlowCanvas();
-  },
   methods: {
-    // handleMouseContextmenu(e) {
-    //   console.log("asa");
-    // },
     toggleDraggable(flowMenuObj) {
       if (flowMenuObj && flowMenuObj.type === "connection") {
         this.cursor = "crosshair";
         this.nodes.forEach((node, index) => {
-          let f = jsp.jsPlumb.toggleDraggable(node.id);
+          let f = this.jspInit.toggleDraggable(node.id);
           if (f) {
-            jsp.jsPlumb.toggleDraggable(node.id);
+            this.jspInit.toggleDraggable(node.id);
           }
           let config = { ...jsPlumbConfig, ...{ anchor: flowAnchor } };
-          jsp.jsPlumb.unmakeSource(node.id);
-          jsp.jsPlumb.unmakeTarget(node.id);
+          this.jspInit.unmakeSource(node.id);
+          this.jspInit.unmakeTarget(node.id);
           this.connector = flowMenuObj.connector;
           config.connector = [this.connector];
-          jsp.jsPlumb.makeSource(node.id, config);
-          jsp.jsPlumb.makeTarget(node.id, config);
+          this.jspInit.makeSource(node.id, config);
+          this.jspInit.makeTarget(node.id, config);
         });
       } else {
         this.cursor = "move";
         this.nodes.forEach((node, index) => {
-          // console.log(jsPlumb.isAlreadyDraggable(node.id));
-          let f = jsp.jsPlumb.toggleDraggable(node.id);
+          let f = this.jspInit.toggleDraggable(node.id);
           if (!f) {
-            jsp.jsPlumb.toggleDraggable(node.id);
+            this.jspInit.toggleDraggable(node.id);
           }
-          jsp.jsPlumb.unmakeSource(node.id);
-          jsp.jsPlumb.unmakeTarget(node.id);
+          this.jspInit.unmakeSource(node.id);
+          this.jspInit.unmakeTarget(node.id);
         });
       }
     },
     initFlowCanvas() {
       let { nodes, links } = this.$store.state.flowData;
-      jsp.jsPlumb.ready(() => {
-        jsp.jsPlumb.deleteEveryEndpoint();
-        jsp.jsPlumb.deleteEveryConnection();
-        jsp.jsPlumb.unmakeEverySource();
-        jsp.jsPlumb.unmakeEveryTarget();
-        jsp.jsPlumb.unbind("click");
-        jsp.jsPlumb.unbind("contextmenu");
-        jsp.jsPlumb.unbind("connection");
-        jsp.jsPlumb.batch(() => {
-          this.nodes = nodes;
+      this.jspInit.ready(() => {
+        this.jspInit.deleteEveryEndpoint();
+        this.jspInit.deleteEveryConnection();
+        this.jspInit.unmakeEverySource();
+        this.jspInit.unmakeEveryTarget();
+        this.jspInit.unbind("click");
+        this.jspInit.unbind("contextmenu");
+        this.jspInit.unbind("connection");
+
+        this.nodes = nodes;
+        this.$nextTick(() => {
           links.forEach((link, index) => {
-            this.$nextTick(() => {
-              let jsPConnect = jsp.jsPlumb.connect(
-                {
-                  source: link.sourceId,
-                  target: link.targetId,
-                },
-                {
-                  isSource: jsPlumbConfig.isSource, // 是否可以拖动（作为连线起点）
-                  isTarget: jsPlumbConfig.isTarget, // 是否可以放置（连线终点）
-                  //连线的样式
-                  paintStyle: jsPlumbConfig.connectorStyle, //连线的样式
-                  hoverPaintStyle: jsPlumbConfig.connectorHoverStyle,
+            let jsPConnect = this.jspInit.connect(
+              {
+                source: link.sourceId,
+                target: link.targetId,
+              },
+              {
+                isSource: jsPlumbConfig.isSource, // 是否可以拖动（作为连线起点）
+                isTarget: jsPlumbConfig.isTarget, // 是否可以放置（连线终点）
+                //连线的样式
+                paintStyle: jsPlumbConfig.connectorStyle, //连线的样式
+                hoverPaintStyle: jsPlumbConfig.connectorHoverStyle,
 
-                  //  锚点
-                  endpoint: jsPlumbConfig.endpoints,
-                  endpointStyle: jsPlumbConfig.paintStyle,
-                  endpointHoverStyle: jsPlumbConfig.hoverPaintStyle,
+                //  锚点
+                endpoint: jsPlumbConfig.endpoints,
+                endpointStyle: jsPlumbConfig.paintStyle,
+                endpointHoverStyle: jsPlumbConfig.hoverPaintStyle,
 
-                  connector: link.connector ? link.connector : jsPlumbConfig.connector,
-                  anchor: flowAnchor,
-                  overlays: jsPlumbConfig.connectorOverlays,
-                }
-              );
-              if (link.label) {
-                jsPConnect.setLabel({
-                  label: link.label,
-                  cssClass: "link-label",
-                  // events: {
-                  //   click: (labelOverlay, originalEvent) => {
-                  //     console.log("点击了label");
-                  //   },
-                  // },
-                });
+                connector: link.connector ? link.connector : jsPlumbConfig.connector,
+                anchor: flowAnchor,
+                overlays: jsPlumbConfig.connectorOverlays,
               }
-              this.initConnection(jsPConnect, link);
-            });
+            );
+            if (link.label) {
+              jsPConnect.setLabel({
+                label: link.label,
+                cssClass: "link-label",
+                // events: {
+                //   click: (labelOverlay, originalEvent) => {
+                //     console.log("点击了label");
+                //   },
+                // },
+              });
+            }
+            this.initConnection(jsPConnect, link);
           });
+        });
 
-          jsp.jsPlumb.bind("connection", (conn, e) => {
-            let connection = jsp.jsPlumb.getConnections({
-              source: conn.sourceId,
-              target: conn.targetId,
-            })[0];
-            this.initConnection(connection, conn);
-            this.addConnection(conn);
-          });
-          // jsPlumb.bind("beforeDrop", function (conn, e) {
-          //   console.log("sdsddsf");
-          //   return true;
-          //   //   // let sourceId = info.sourceId;
-          //   //   // let targetId = info.targetId;
-          //   //   // if (sourceId == targetId) return false;
-          //   //   // let filter = that.flowData.linkList.filter(
-          //   //   //   (link) => link.sourceId == sourceId && link.targetId == targetId
-          //   //   // );
-          // });
+        this.jspInit.bind("connection", (conn, e) => {
+          let connection = this.jspInit.getConnections({
+            source: conn.sourceId,
+            target: conn.targetId,
+          })[0];
+          this.initConnection(connection, conn);
+          this.addConnection(conn);
+        });
+        // jsPlumb.bind("beforeDrop", function (conn, e) {
+        //   console.log("sdsddsf");
+        //   return true;
+        //   //   // let sourceId = info.sourceId;
+        //   //   // let targetId = info.targetId;
+        //   //   // if (sourceId == targetId) return false;
+        //   //   // let filter = that.flowData.linkList.filter(
+        //   //   //   (link) => link.sourceId == sourceId && link.targetId == targetId
+        //   //   // );
+        // });
 
-          //  连线右击事件操作
-          jsp.jsPlumb.bind("contextmenu", (conn, originalEvent) => {
-            this.$emit("context-menu", {
-              type: "link",
-              event: originalEvent,
-              data: conn,
-            });
-            originalEvent.stopPropagation();
-            originalEvent.preventDefault();
-            return false;
+        //  连线右击事件操作
+        this.jspInit.bind("contextmenu", (conn, originalEvent) => {
+          this.$emit("context-menu", {
+            type: "link",
+            event: originalEvent,
+            data: conn,
           });
+          originalEvent.stopPropagation();
+          originalEvent.preventDefault();
+          return false;
         });
       });
     },
@@ -162,12 +151,6 @@ export default {
         this.toggleDraggable();
       });
     },
-    // clear() {
-    //   const that = this;
-    //   this.nodes.forEach((node, index) => {
-    //     jsPlumb.remove(node.id);
-    //   });
-    // },
 
     // 添加节点
     addNewNode(e, node) {
@@ -228,36 +211,14 @@ export default {
       });
     },
     deleteConnection(conn) {
-      let plumb = jsp.jsPlumb.deleteConnection(conn);
+      let plumb = this.jspInit.deleteConnection(conn);
       if (plumb) {
         this.$store.commit("setFlowData", {
           method: "delete-link",
           link: { sourceId: conn.sourceId, targetId: conn.targetId },
         });
       }
-    },
-    // getAllConnections
-    // nodeNameChange(e) {
-    //   this.currentSelect.nodeName = e.target.value;
-    // },
-    // linkLabelChange(e) {
-    //   let label = e.target.value;
-
-    //   that.currentSelect.label = label;
-    //   let conn = that.plumb.getConnections({
-    //     source: that.currentSelect.sourceId,
-    //     target: that.currentSelect.targetId,
-    //   })[0];
-    //   if (label != "") {
-    //     conn.setLabel({
-    //       label: label,
-    //       cssClass: "linkLabel",
-    //     });
-    //   } else {
-    //     let labelOverlay = conn.getLabelOverlay();
-    //     if (labelOverlay) conn.removeOverlay(labelOverlay.id);
-    //   }
-    // },
+    }
   },
 };
 </script>

@@ -21,6 +21,7 @@
       <FlowArea ref="flowArea" @context-menu="handleMouseContextmenu($event)" />
     </div>
     <div class="mouse-position">x: {{ mousePosition.x }}, y: {{ mousePosition.y }}</div>
+    <div class="footer"><span>by.zll @ 2021-1-6</span></div>
     <!-- 右击菜单 -->
     <template v-if="rightMenuObj.show">
       <RightMenu
@@ -114,11 +115,9 @@ export default {
         left: offsetX,
       };
     }
+    this.$refs.flowArea.initFlowCanvas();
   },
   methods: {
-    // handleResetCanvas() {
-    //   this.$refs.flowArea.initFlowCanvas(flowData1);
-    // },
     // 保存画布内容
     handleSave() {
       let flowData = JSON.stringify(this.$store.state.flowData);
@@ -135,7 +134,7 @@ export default {
         top: offsetY,
         left: offsetX,
       };
-      this.$store.commit("setFlowData", flowConfig);
+      this.$store.commit("setFlowData", JSON.parse(JSON.stringify(flowConfig)));
       this.$refs.flowArea.initFlowCanvas();
     },
     // 滚轮滚动事件
@@ -266,7 +265,6 @@ main {
   height: 100%;
   overflow: hidden;
   position: relative;
-  //  z-index: 0;
   .grid {
     &::before {
       content: "";
@@ -299,7 +297,14 @@ main {
   .view-scale {
     position: absolute;
     top: 10px;
-    left: 10px;
+    right: 10px;
+    z-index: 1;
+    font-size: 12px;
+  }
+  .footer {
+    position: absolute;
+    bottom: 10px;
+    left: 20px;
     z-index: 1;
   }
   .reset {

@@ -46,14 +46,13 @@
   </div>
 </template>
 <script>
-import jsp from "jsplumb";
 export default {
   name: "menu-node",
   props: ["node"],
   mounted() {
-    // console.log(this.node);
+    let jspInit = this.$store.state.jspInit;
     this.$nextTick(() => {
-      jsp.jsPlumb.draggable(this.node.id);
+      jspInit.draggable(this.node.id);
     });
   },
   methods: {
@@ -88,32 +87,11 @@ export default {
   }
   .active {
     border: 1px dashed #409eff;
-    // outline: 1px dashed #409eff;
-    // outline-offset: 0;
   }
   i {
     font-size: 16px;
   }
 }
-// .node-item {
-//   padding: 20px;
-//   position: absolute;
-//   border: 2px solid transparent;
-//   background: rgb(239, 154, 154);
-//   .paint-box {
-//     position: relative;
-//     z-index: 2;
-//     .paint {
-//       position: absolute;
-//       left: 50%;
-//       top: 50%;
-//       z-index: 2;
-//       transform: translate(-50%, -50%);
-//       background: coral;
-//     }
-//   }
-
-// }
 .menu-start-node {
   width: 100px;
   padding: 12px 18px;
@@ -162,7 +140,6 @@ export default {
     color: cornsilk;
   }
   > p {
-    // margin-left: 10px;
     padding: 10px;
     font-size: 12px;
     margin-top: 2px;
@@ -182,7 +159,6 @@ export default {
     align-items: center;
   }
   > p {
-    // margin-left: 10px;
     padding: 10px;
     font-size: 12px;
     margin-top: 2px;

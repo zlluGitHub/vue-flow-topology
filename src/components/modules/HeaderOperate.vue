@@ -123,19 +123,6 @@ export default {
       middleSelectType: "drag-drop", //操作类型
       selectLineSvg: "", //连接线的样式
       connector: "",
-      // middleMenu: [
-
-      //   {
-      //     icon: "md-cut",
-      //     label: "裁剪",
-      //     type: "tailoring",
-      //   },
-      //   {
-      //     icon: "md-sync",
-      //     label: "重置",
-      //     type: "reset",
-      //   },
-      // ],
     };
   },
   created() {
