@@ -1,53 +1,50 @@
 <template>
-  <div v-if="node.type === 'start-node'" class="item-node menu-start-node">
-    {{ node.name }}
-  </div>
-  <div v-else-if="node.type === 'end-node'" class="item-node menu-end-node">
-    {{ node.name }}
-  </div>
-  <div v-else-if="node.type === 'in-node'" class="item-node menu-in-node">
-    {{ node.name }}
-  </div>
-  <div v-else-if="node.type === 'out-node'" class="item-node menu-out-node">
-    {{ node.name }}
-  </div>
-  <div v-else-if="node.type === 'cog-node'" class="item-node menu-cog-node">
-    <div>
-      <Icon :type="node.icon" />
-      <span> {{ node.name }}</span>
+  <div>
+    <div v-if="node.type === 'start-node'" class="item-node menu-start-node">
+      {{ node.name }}
     </div>
-    <p>相关配置内容</p>
-  </div>
-  <div v-else-if="node.type === 'codepen-node'" class="item-node menu-codepen-node">
-    <div>
-      <Icon :type="node.icon" />
-      <span> {{ node.name }}</span>
+    <div v-else-if="node.type === 'end-node'" class="item-node menu-end-node">
+      {{ node.name }}
     </div>
-    <p>相关配置内容</p>
-  </div>
-  <div v-else-if="node.type === 'pulse-node'" class="item-node menu-pulse-node">
-    <div>
+    <div v-else-if="node.type === 'in-node'" class="item-node menu-in-node">
+      {{ node.name }}
+    </div>
+    <div v-else-if="node.type === 'out-node'" class="item-node menu-out-node">
+      {{ node.name }}
+    </div>
+    <div v-else-if="node.type === 'cog-node'" class="item-node menu-cog-node">
       <div>
-        <Icon :type="node.icon" /> <span> {{ node.name }}</span>
+        <Icon :type="node.icon" />
+        <span> {{ node.name }}</span>
       </div>
-      <Icon type="md-power" />
+      <p>相关配置内容</p>
     </div>
-    <p>
-      <span>执行状态：正在监听...</span>
-      <span>98%</span>
-    </p>
+    <div v-else-if="node.type === 'codepen-node'" class="item-node menu-codepen-node">
+      <div>
+        <Icon :type="node.icon" />
+        <span> {{ node.name }}</span>
+      </div>
+      <p>相关配置内容</p>
+    </div>
+    <div v-else-if="node.type === 'pulse-node'" class="item-node menu-pulse-node">
+      <div>
+        <div>
+          <Icon :type="node.icon" /> <span> {{ node.name }}</span>
+        </div>
+        <Icon type="md-power" />
+      </div>
+      <p>
+        <span>执行状态：正在监听...</span>
+        <span>98%</span>
+      </p>
+    </div>
+    <div v-else>无效节点</div>
   </div>
-  <div v-else></div>
 </template>
 <script>
 export default {
   name: "menu-node",
-  data() {
-    return {};
-  },
-  props: ["node"],
-  mounted() {},
-  methods: {},
+  props: ["node"]
 };
 </script>
 

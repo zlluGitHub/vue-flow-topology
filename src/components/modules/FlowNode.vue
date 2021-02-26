@@ -1,8 +1,10 @@
 <template>
+    <!-- @click.stop="handleSelectNode(node)" -->
   <div
     class="node-warp"
     @contextmenu.prevent.stop="$emit('context-menu', $event)"
-    @click.stop="handleSelectNode(node)"
+    @mousedown="handlerMousedown(node)"
+    @click.stop="handlerMouseUp(node)"
   >
     <div v-if="node.type === 'start-node'" class="item-node menu-start-node">
       {{ node.name }}
@@ -56,22 +58,32 @@ export default {
     });
   },
   methods: {
-    handleSelectNode(node) {
-      document.getElementsByClassName("item-node").forEach((ele) => {
-        ele.classList.remove("active");
-      });
+    handlerMouseUp(node) {
       let nodeEle = document.getElementById(node.id);
       let { top, left } = nodeEle.style;
-      let nodes = this.$store.state.flowData.nodes;
-      nodes.forEach((item) => {
-        if (item.id === node.id) {
-          item.x = left.slice(0, left.length - 2) * 1;
-          item.y = top.slice(0, top.length - 2) * 1;
-        }
-      });
-      this.$store.commit("setFlowData", { nodes });
-      nodeEle.getElementsByClassName("item-node")[0].classList.add("active");
-      this.$store.commit("setSelectContent", { type: "node", data: node });
+      let x = left.slice(0, left.length - 2) * 1;
+      let y = top.slice(0, top.length - 2) * 1;
+      if (node.x !== x && node.y !== y) {
+        let flowData = this.$store.state.flowData;
+        flowData.nodes.forEach((item) => {
+          if (item.id === node.id) {
+            item.x = x;
+            item.y = y;
+          }
+        });
+        this.$store.commit("setFlowData", flowData);
+        this.$store.commit("setFlowStepData", flowData);
+      }
+    },
+    handlerMousedown(node) {
+      if (this.$store.state.flowMenuObj.type === "drag-drop") {
+        document.getElementsByClassName("item-node").forEach((ele) => {
+          ele.classList.remove("active");
+        });
+        let nodeEle = document.getElementById(node.id);
+        nodeEle.getElementsByClassName("item-node")[0].classList.add("active");
+        this.$store.commit("setSelectContent", { type: "node", data: node });
+      }
     },
   },
 };

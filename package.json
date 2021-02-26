@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "core-js": "^3.6.5",
+    "file-saver": "^2.0.5",
     "jsplumb": "^2.15.5",
     "register-service-worker": "^1.7.1",
     "view-design": "^4.4.0",

@@ -3,7 +3,6 @@
     ref="main"
     @mousedown="mousedownHandler"
     @mouseup="mouseupHandler"
-    @click.stop="handleFlowClick"
     @mousemove="mousemoveHandler"
     @contextmenu.prevent.stop="handleMouseContextmenu({ type: 'flow', event: $event })"
   >
@@ -18,7 +17,7 @@
         top: dragMove.top + 'px',
       }"
     >
-      <FlowArea ref="flowArea" @context-menu="handleMouseContextmenu($event)" />
+      <FlowArea ref="flowArea" @context-menu="handleMouseContextmenu" />
     </div>
     <div class="mouse-position">x: {{ mousePosition.x }}, y: {{ mousePosition.y }}</div>
     <div class="footer"><span>by.zll @ 2021-1-6</span></div>
@@ -31,12 +30,16 @@
       />
       <div class="mask" @click.stop="handleCloseMenu"></div>
     </template>
+    <!-- 导入工作流 -->
+    <input type="file" ref="inputFile" @change="handleExportFile" style="display: none" />
   </main>
 </template>
 <script>
+import fileSaver from "file-saver";
 import FlowArea from "./modules/FlowArea";
 import RightMenu from "./modules/ContextMenu";
-import { flowConfig } from "../config/flow.config.js";
+import { flowConfig } from "@/config/flow.config.js";
+import { uploadFile, deepClone } from "@/utils";
 export default {
   name: "FlowContent",
   components: { FlowArea, RightMenu },
@@ -68,22 +71,59 @@ export default {
       return this.$store.state.flowMenuObj;
     },
   },
+
   watch: {
     flowMenuObj(newVal, oldVal) {
-      if (newVal.type === "connection" || newVal.type === "drag-drop") {
+      if (newVal.type === "upper-step") {
+        // 上一步
+        let flowStepData = this.$store.state.flowStepData;
+        let stepIndex = this.$store.state.stepIndex;
+        if (stepIndex > 0) {
+          stepIndex = stepIndex - 1;
+          this.$store.commit("setStepIndex", stepIndex);
+          this.$store.commit("setFlowData", flowStepData[stepIndex]);
+          this.$refs.flowArea.initFlowCanvas();
+        }
+      } else if (newVal.type === "next-step") {
+        //下一步
+        let flowStepData = this.$store.state.flowStepData;
+        let stepIndex = this.$store.state.stepIndex;
+        if (stepIndex < flowStepData.length - 1) {
+          stepIndex = stepIndex + 1;
+          this.$store.commit("setStepIndex", stepIndex);
+          this.$store.commit("setFlowData", flowStepData[stepIndex]);
+          this.$refs.flowArea.initFlowCanvas();
+        }
+      } else if (newVal.type === "connection" || newVal.type === "drag-drop") {
         this.$refs.flowArea.toggleDraggable(newVal);
       } else if (newVal.type === "enlarge") {
+        // 放大
         this.scalePosition = {
           x: 3686,
           y: 3355,
         };
         this.setZoom("enlarge");
       } else if (newVal.type === "narrow") {
+        // 缩小
         this.scalePosition = {
           x: 3686,
           y: 3355,
         };
         this.setZoom("narrow");
+      } else if (newVal.type === "import") {
+        this.$refs.inputFile.click();
+        // inputFileDom.onchange = () => {
+        //   uploadFile(this.$refs.inputFile, (content) => {
+        //     this.$store.commit("setFlowData", JSON.parse(content));
+        //     this.handleCreateClick();
+        //   });
+        // };
+      } else if (newVal.type === "export") {
+        let flowData = this.$store.state.flowData;
+        let blob = new Blob([JSON.stringify(flowData)], {
+          type: "text/plain;charset=utf-8",
+        });
+        fileSaver(blob, `${flowData.title}.flow`);
       } else if (newVal.type === "restore") {
         let { offsetX, offsetY } = flowConfig;
         this.dragMove = {
@@ -118,6 +158,21 @@ export default {
     this.$refs.flowArea.initFlowCanvas();
   },
   methods: {
+    handleExportFile() {
+      uploadFile(this.$refs.inputFile, (content) => {
+        this.$store.commit("setFlowData", JSON.parse(content));
+        this.$refs.flowArea.initFlowCanvas();
+      });
+    },
+    // 拖拽鼠标抬起事件（添加节点）
+    onIsAddNode() {
+      if (this.$store.state.newNode.state) {
+        let time = setTimeout(() => {
+          this.$refs.flowArea.handleNewNode("drag", this.mousePosition);
+          clearTimeout(time);
+        }, 25);
+      }
+    },
     // 保存画布内容
     handleSave() {
       let flowData = JSON.stringify(this.$store.state.flowData);
@@ -182,8 +237,7 @@ export default {
       this.rightMenuObj = { show: false };
     },
     // 鼠标右击事件
-    handleMouseContextmenu(content) {
-      let { event, type, data } = content;
+    handleMouseContextmenu({ event, type, data }) {
       this.event = event;
       this.rightMenuObj = {
         type,
@@ -192,6 +246,7 @@ export default {
         y: event.y,
       };
       if (type === "flow") {
+        this.newNodePosition = { ...this.mousePosition };
       } else if (type === "node") {
         this.nodeData = data;
       } else if (type === "link") {
@@ -199,8 +254,7 @@ export default {
       }
     },
     // 右击菜单事件类型
-    handleRightMenuClick(data) {
-      let { type } = data;
+    handleRightMenuClick({ type, event }) {
       if (type === "delete-node") {
         this.$refs.flowArea.deleteNode(this.nodeData);
       } else if (type === "save") {
@@ -208,13 +262,15 @@ export default {
       } else if (type === "delete-link") {
         this.$refs.flowArea.deleteConnection(this.linkData);
       } else if (type === "copy") {
-        let { name, type, icon } = this.nodeData;
         this.$store.commit("setNewNode", {
           state: false,
-          node: { name, type, icon, x: 0, y: 0 },
+          node: deepClone(this.nodeData),
         });
       } else if (type === "paste") {
-        this.$refs.flowArea.pasteNode(this.event);
+        let time = setTimeout(() => {
+          this.$refs.flowArea.handleNewNode("paste", this.newNodePosition);
+          clearTimeout(time);
+        }, 25);
       }
       this.handleCloseMenu();
     },
@@ -228,18 +284,32 @@ export default {
         y: event.y,
         x: event.x,
       };
-    },
-    // 鼠标点击事件
-    handleFlowClick() {
+
       this.$store.commit("setSelectContent", {
         type: "",
         data: this.$store.state.flowData,
       });
+
+      this.$emit("on-select-type", "drag-drop");
+      this.$store.commit("setFlowMenuObj", { type: "drag-drop" });
+      document.getElementsByClassName("item-node").forEach((ele) => {
+        ele.classList.remove("active");
+      });
     },
+
     // 鼠标抬起事件
     mouseupHandler(e) {
-      this.dragMove.isDown = false;
-      // this.handleResetCanvas();
+      let flowData = this.$store.state.flowData;
+      if (
+        flowData.offsetX !== this.dragMove.left &&
+        flowData.offsetY !== this.dragMove.top
+      ) {
+        flowData.offsetX = this.dragMove.left;
+        flowData.offsetY = this.dragMove.top;
+        this.$store.commit("setFlowData", flowData);
+        this.$store.commit("setFlowStepData", flowData);
+      }
+      this.dragMove = { ...this.dragMove, ...{ isDown: false } };
     },
     // 鼠标移动事件
     mousemoveHandler(e) {
@@ -247,15 +317,18 @@ export default {
       let offsetX = event.layerX ? event.layerX : event.offsetX;
       let offsetY = event.layerY ? event.layerY : event.offsetY;
       this.mousePosition = { x: offsetX, y: offsetY };
-      let { downPosition, originalPosition, isDown, top, left } = this.dragMove;
+      let { downPosition, originalPosition, isDown } = this.dragMove;
       if (isDown) {
         let top = originalPosition.top + (event.y - downPosition.y);
         let left = originalPosition.left + (event.x - downPosition.x);
         this.dragMove.top = top;
         this.dragMove.left = left;
-        this.$store.commit("setFlowData", { offsetX: left, offsetY: top });
       }
     },
+  },
+  beforeDestroy() {
+    this.$store.commit("setFlowStepData");
+    this.$Message.destroy();
   },
 };
 </script>

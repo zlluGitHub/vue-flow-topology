@@ -1,5 +1,3 @@
-
-
 export const flowAnchors = ["Top", "Right", "Bottom", "Left"];
 export const flowAnchor = "Continuous";
 export const connectorType = ['Bezier', 'Flowchart', 'StateMachine', 'Straight'];

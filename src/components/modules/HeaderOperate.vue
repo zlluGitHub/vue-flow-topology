@@ -1,24 +1,24 @@
 <template>
   <div class="operate-menu">
     <ul class="left">
-      <!-- <li
-        @click="handleMiddleMenu('last-step')"
-        :class="[middleSelectType === 'last-step' ? 'active' : '']"
+      <li
+        @click.stop="handleMiddleMenu('upper-step')"
+        :class="[middleSelectType === 'upper-step' ? 'active' : '']"
       >
         <Tooltip content="上一步" placement="bottom">
           <Icon type="ios-undo" />
         </Tooltip>
       </li>
       <li
-        @click="handleMiddleMenu('next-step')"
+        @click.stop="handleMiddleMenu('next-step')"
         :class="[middleSelectType === 'next-step' ? 'active' : '']"
       >
         <Tooltip content="下一步" placement="bottom">
           <Icon type="ios-redo" />
         </Tooltip>
-      </li> -->
+      </li>
       <li
-        @click="handleMiddleMenu('drag-drop')"
+        @click.stop="handleMiddleMenu('drag-drop')"
         :class="[middleSelectType === 'drag-drop' ? 'active' : '']"
       >
         <Tooltip content="拖拽" placement="bottom">
@@ -30,27 +30,27 @@
           <!-- <Icon type="md-git-network" /> -->
           <div class="svg-icon" v-html="selectLineSvg"></div>
           <DropdownMenu slot="list">
-            <DropdownItem @click.native="handleMiddleMenu('connection', 'Bezier')">
+            <DropdownItem @click.stop.native="handleMiddleMenu('connection', 'Bezier')">
               <div class="svg-icon" v-html="BezierSvg"></div
             ></DropdownItem>
-            <DropdownItem @click.native="handleMiddleMenu('connection', 'Flowchart')">
+            <DropdownItem @click.stop.native="handleMiddleMenu('connection', 'Flowchart')">
               <div class="svg-icon" v-html="FlowchartSvg"></div
             ></DropdownItem>
-            <DropdownItem @click.native="handleMiddleMenu('connection', 'Straight')">
+            <DropdownItem @click.stop.native="handleMiddleMenu('connection', 'Straight')">
               <div class="svg-icon" v-html="StraightSvg"></div
             ></DropdownItem>
-            <DropdownItem @click.native="handleMiddleMenu('connection', 'StateMachine')">
+            <DropdownItem @click.stop.native="handleMiddleMenu('connection', 'StateMachine')">
               <div class="svg-icon" v-html="StateMachineSvg"></div
             ></DropdownItem>
           </DropdownMenu>
         </Dropdown>
       </li>
-      <li @click="handleMiddleMenu('enlarge')">
+      <li @click.stop="handleMiddleMenu('enlarge')">
         <Tooltip content="放大" placement="bottom">
           <div class="svg-icon" v-html="EnlargeSvg"></div>
         </Tooltip>
       </li>
-      <li @click="handleMiddleMenu('narrow')">
+      <li @click.stop="handleMiddleMenu('narrow')">
         <Tooltip content="缩小" placement="bottom">
           <div class="svg-icon" v-html="NarrowSvg"></div>
         </Tooltip>
@@ -58,15 +58,31 @@
     </ul>
     <ul class="right">
       <li
-        @click="handleMiddleMenu('restore')"
-        :class="[middleSelectType === 'restore' ? 'active' : '']"
+        @click.stop="handleMiddleMenu('import')"
+        :class="[middleSelectType === 'import' ? 'active' : '']"
       >
-        <Tooltip content="还原视图" placement="bottom">
-         <Icon type="md-locate" />
+        <Tooltip content="导入工作流" placement="bottom">
+          <Icon type="ios-cloud-upload-outline" />
         </Tooltip>
       </li>
       <li
-        @click="handleMiddleMenu('view-code')"
+        @click.stop="handleMiddleMenu('export')"
+        :class="[middleSelectType === 'export' ? 'active' : '']"
+      >
+        <Tooltip content="导出工作流" placement="bottom">
+          <Icon type="ios-cloud-download-outline" />
+        </Tooltip>
+      </li>
+      <li
+        @click.stop="handleMiddleMenu('restore')"
+        :class="[middleSelectType === 'restore' ? 'active' : '']"
+      >
+        <Tooltip content="还原视图" placement="bottom">
+          <Icon type="md-locate" />
+        </Tooltip>
+      </li>
+      <li
+        @click.stop="handleMiddleMenu('view-code')"
         :class="[middleSelectType === 'view-code' ? 'active' : '']"
       >
         <Tooltip content="查看Json数据" placement="bottom">
@@ -74,7 +90,7 @@
         </Tooltip>
       </li>
       <li
-        @click="handleMiddleMenu('reset')"
+        @click.stop="handleMiddleMenu('reset')"
         :class="[middleSelectType === 'reset' ? 'active' : '']"
       >
         <Tooltip content="重置" placement="bottom">
@@ -82,7 +98,7 @@
         </Tooltip>
       </li>
       <li
-        @click="handleMiddleMenu('save')"
+        @click.stop="handleMiddleMenu('save')"
         :class="[middleSelectType === 'save' ? 'active' : '']"
       >
         <Tooltip content="保存画布" placement="bottom">
@@ -90,7 +106,7 @@
         </Tooltip>
       </li>
       <li
-        @click="handleMiddleMenu('clear')"
+        @click.stop="handleMiddleMenu('clear')"
         :class="[middleSelectType === 'clear' ? 'active' : '']"
       >
         <Tooltip content="清空画布" placement="bottom">
@@ -108,7 +124,7 @@ import {
   StateMachineSvg,
   EnlargeSvg,
   NarrowSvg,
-} from "../../config/icon.config";
+} from "@/config/icon.config";
 export default {
   name: "operate-menu",
   data() {
@@ -131,6 +147,7 @@ export default {
   },
   methods: {
     handleMiddleMenu(type, connector) {
+      console.log(type);
       this.middleSelectType = type;
       this.iconSvgInit();
       if (type === "connection") {
@@ -201,7 +218,7 @@ export default {
       }
     }
   }
-  /deep/ .ivu-tooltip{
+  /deep/ .ivu-tooltip {
     display: flex;
     align-items: center;
   }

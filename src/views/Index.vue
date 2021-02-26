@@ -1,19 +1,24 @@
 <template>
-  <div class="index" id="zll-index">
+  <div
+    class="index"
+    id="zll-index"
+    @mousemove.prevent="handleMousemove"
+    @mouseup.prevent="handleMouseup"
+  >
     <div class="flow-menu">
       <header>
         <h1>Vue Flow Topology</h1>
       </header>
       <div class="section">
-        <flow-menu />
+        <FlowMenu @on-is-add-node="onIsAddNode" />
       </div>
     </div>
     <div class="middle">
       <header>
-        <header-operate />
+        <HeaderOperate ref="operate" />
       </header>
       <div class="section">
-        <flow-content />
+        <FlowContent ref="flowContent" @on-select-type="onSelectType" />
       </div>
     </div>
     <div class="flow-attr">
@@ -55,6 +60,7 @@ export default {
   },
   data() {
     return {
+      isMouseDownStop: false,
       isJsonView: false,
       jsonData: "暂无内容",
     };
@@ -66,7 +72,6 @@ export default {
   },
   watch: {
     flowMenuObj(newVal, oldVal) {
-      console.log(newVal);
       if (newVal.type === "view-code") {
         this.jsonData = this.$store.state.flowData;
         this.isJsonView = true;
@@ -80,8 +85,29 @@ export default {
     this.jsonData = this.$store.state.flowData;
   },
   methods: {
+    onIsAddNode() {
+      this.$refs.flowContent.onIsAddNode();
+    },
+    onSelectType(type) {
+      this.$refs.operate.handleMiddleMenu(type);
+    },
     handleCloseJsonView() {
       //  this.jsonData = this.$store.state.flowData;
+    },
+    handleMouseup(e) {
+      this.isMouseDownStop = false;
+    },
+    handleMousemove(e) {
+      if (this.isMouseDownStop) {
+        this.flowAttrVerticalWidth =
+          this.flowAttrVerticalWidthDown + this.mouseDownOffset - e.x;
+        if (this.flowAttrVerticalWidth < 450) {
+          this.flowAttrVerticalWidth = 450;
+        }
+        if (this.flowAttrVerticalWidth > 1200) {
+          this.flowAttrVerticalWidth = 1200;
+        }
+      }
     },
   },
 };

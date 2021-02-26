@@ -1,5 +1,5 @@
 <template>
-  <div class="flow-area" ref="flowArea" @mouseup="handlerMouseup">
+  <div class="flow-area">
     <flow-node
       v-for="(node, i) in nodes"
       :key="'node' + i"
@@ -21,11 +21,14 @@ export default {
   components: { FlowNode },
   data() {
     return {
-      jspInit: this.$store.state.jspInit,
+      jspInit: null,
       nodes: [],
       cursor: "move",
       connector: "",
     };
+  },
+  created() {
+    this.jspInit = this.$store.state.jspInit;
   },
   methods: {
     toggleDraggable(flowMenuObj) {
@@ -56,121 +59,109 @@ export default {
         });
       }
     },
-    initFlowCanvas() {
-      let { nodes, links } = this.$store.state.flowData;
-      this.jspInit.ready(() => {
-        this.jspInit.deleteEveryEndpoint();
-        this.jspInit.deleteEveryConnection();
-        this.jspInit.unmakeEverySource();
-        this.jspInit.unmakeEveryTarget();
-        this.jspInit.unbind("click");
-        this.jspInit.unbind("contextmenu");
-        this.jspInit.unbind("connection");
-
-        this.nodes = nodes;
-        this.$nextTick(() => {
-          links.forEach((link, index) => {
-            let jsPConnect = this.jspInit.connect(
-              {
-                source: link.sourceId,
-                target: link.targetId,
-              },
-              {
-                isSource: jsPlumbConfig.isSource, // 是否可以拖动（作为连线起点）
-                isTarget: jsPlumbConfig.isTarget, // 是否可以放置（连线终点）
-                //连线的样式
-                paintStyle: jsPlumbConfig.connectorStyle, //连线的样式
-                hoverPaintStyle: jsPlumbConfig.connectorHoverStyle,
-
-                //  锚点
-                endpoint: jsPlumbConfig.endpoints,
-                endpointStyle: jsPlumbConfig.paintStyle,
-                endpointHoverStyle: jsPlumbConfig.hoverPaintStyle,
-
-                connector: link.connector ? link.connector : jsPlumbConfig.connector,
-                anchor: flowAnchor,
-                overlays: jsPlumbConfig.connectorOverlays,
-              }
-            );
-            if (link.label) {
-              jsPConnect.setLabel({
-                label: link.label,
-                cssClass: "link-label",
-                // events: {
-                //   click: (labelOverlay, originalEvent) => {
-                //     console.log("点击了label");
-                //   },
-                // },
-              });
-            }
-            this.initConnection(jsPConnect, link);
-          });
-        });
-
-        this.jspInit.bind("connection", (conn, e) => {
-          let connection = this.jspInit.getConnections({
-            source: conn.sourceId,
-            target: conn.targetId,
-          })[0];
-          this.initConnection(connection, conn);
-          this.addConnection(conn);
-        });
-        // jsPlumb.bind("beforeDrop", function (conn, e) {
-        //   console.log("sdsddsf");
-        //   return true;
-        //   //   // let sourceId = info.sourceId;
-        //   //   // let targetId = info.targetId;
-        //   //   // if (sourceId == targetId) return false;
-        //   //   // let filter = that.flowData.linkList.filter(
-        //   //   //   (link) => link.sourceId == sourceId && link.targetId == targetId
-        //   //   // );
-        // });
-
-        //  连线右击事件操作
-        this.jspInit.bind("contextmenu", (conn, originalEvent) => {
-          this.$emit("context-menu", {
-            type: "link",
-            event: originalEvent,
-            data: conn,
-          });
-          originalEvent.stopPropagation();
-          originalEvent.preventDefault();
-          return false;
-        });
-      });
-    },
-
-    handlerMouseup(e) {
-      if (this.$store.state.newNode.state) {
-        this.pasteNode(e);
-      }
-    },
-    pasteNode(e) {
-      this.nodes = this.addNewNode(e, this.$store.state.newNode.node);
+    initFlowCanvas(data) {
+      let { nodes, links } = data ? data : this.$store.state.flowData;
+      this.nodes = nodes;
+      // this.jspInit.ready(() => {
+      this.jspInit.deleteEveryEndpoint();
+      this.jspInit.deleteEveryConnection();
+      this.jspInit.unmakeEverySource();
+      this.jspInit.unmakeEveryTarget();
+      this.jspInit.unbind("click");
+      this.jspInit.unbind("contextmenu");
+      this.jspInit.unbind("connection");
+      this.jspInit.repaintEverything();
+      this.jspInit.setSuspendDrawing(false, true);
       this.$nextTick(() => {
-        this.toggleDraggable();
+        links.forEach((link, index) => {
+          let jsPConnect = this.jspInit.connect(
+            {
+              source: link.sourceId,
+              target: link.targetId,
+            },
+            {
+              isSource: jsPlumbConfig.isSource, // 是否可以拖动（作为连线起点）
+              isTarget: jsPlumbConfig.isTarget, // 是否可以放置（连线终点）
+              //连线的样式
+              paintStyle: jsPlumbConfig.connectorStyle, //连线的样式
+              hoverPaintStyle: jsPlumbConfig.connectorHoverStyle,
+
+              //  锚点
+              endpoint: jsPlumbConfig.endpoints,
+              endpointStyle: jsPlumbConfig.paintStyle,
+              endpointHoverStyle: jsPlumbConfig.hoverPaintStyle,
+
+              connector: link.connector ? link.connector : jsPlumbConfig.connector,
+              anchor: flowAnchor,
+              overlays: jsPlumbConfig.connectorOverlays,
+            }
+          );
+          if (link.label) {
+            jsPConnect.setLabel({
+              label: link.label,
+              cssClass: "link-label",
+              // events: {
+              //   click: (labelOverlay, originalEvent) => {
+              //     console.log("点击了label");
+              //   },
+              // },
+            });
+          }
+          // this.initConnection(jsPConnect, link);
+        });
       });
+
+      this.jspInit.bind("connection", (conn, e) => {
+        let connection = this.jspInit.getConnections({
+          source: conn.sourceId,
+          target: conn.targetId,
+        })[0];
+        this.initConnection(connection, conn);
+        this.addConnection(conn);
+      });
+      //  连线右击事件操作
+      this.jspInit.bind("contextmenu", (conn, originalEvent) => {
+        this.$emit("context-menu", {
+          type: "link",
+          event: originalEvent,
+          data: conn,
+        });
+        originalEvent.stopPropagation();
+        originalEvent.preventDefault();
+        return false;
+      });
+    },
+
+    handleNewNode(mark, position) {
+      let node = this.$store.state.newNode.node;
+      if (mark === "paste") {
+        this.addNewNode(
+          Object.assign(node, {
+            id: getUUID(),
+            x: position.x,
+            y: position.y,
+          })
+        );
+      } else if (mark === "drag") {
+        this.addNewNode(
+          Object.assign(node, {
+            id: getUUID(),
+            x: position.x - node.x,
+            y: position.y - node.y,
+          })
+        );
+      }
     },
 
     // 添加节点
-    addNewNode(e, node) {
-      let newNode = this.$store.state.flowData.nodes;
-      newNode.push(
-        Object.assign(
-          {
-            name: node.name,
-            type: node.type,
-            icon: node.icon,
-
-            id: getUUID(),
-            x: e.offsetX - node.x,
-            y: e.offsetY - node.y,
-          },
-          nodePrame
-        )
-      );
-      this.$store.commit("setFlowData", { nodes: newNode });
-      return newNode;
+    addNewNode(newNode) {
+      this.$store.commit("setFlowData", { method: "add-node", node: newNode });
+      this.nodes = newNode;
+      this.initFlowCanvas();
+      this.$store.commit("setNewNode", {
+        state: false,
+        node: this.$store.state.newNode.node,
+      });
     },
     // 删除节点
     deleteNode(node) {
@@ -218,7 +209,17 @@ export default {
           link: { sourceId: conn.sourceId, targetId: conn.targetId },
         });
       }
-    }
+    },
+  },
+  beforeDestroy() {
+    this.jspInit.deleteEveryEndpoint();
+    this.jspInit.deleteEveryConnection();
+    this.jspInit.unmakeEverySource();
+    this.jspInit.unmakeEveryTarget();
+    this.jspInit.unbind("click");
+    this.jspInit.unbind("contextmenu");
+    this.jspInit.unbind("connection");
+    this.jspInit = null;
   },
 };
 </script>
