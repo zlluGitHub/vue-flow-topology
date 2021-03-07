@@ -62,16 +62,8 @@ export default {
     initFlowCanvas(data) {
       let { nodes, links } = data ? data : this.$store.state.flowData;
       this.nodes = nodes;
-      // this.jspInit.ready(() => {
       this.jspInit.deleteEveryEndpoint();
       this.jspInit.deleteEveryConnection();
-      this.jspInit.unmakeEverySource();
-      this.jspInit.unmakeEveryTarget();
-      this.jspInit.unbind("click");
-      this.jspInit.unbind("contextmenu");
-      this.jspInit.unbind("connection");
-      this.jspInit.repaintEverything();
-      this.jspInit.setSuspendDrawing(false, true);
       this.$nextTick(() => {
         links.forEach((link, index) => {
           let jsPConnect = this.jspInit.connect(
@@ -214,11 +206,11 @@ export default {
   beforeDestroy() {
     this.jspInit.deleteEveryEndpoint();
     this.jspInit.deleteEveryConnection();
-    this.jspInit.unmakeEverySource();
-    this.jspInit.unmakeEveryTarget();
-    this.jspInit.unbind("click");
-    this.jspInit.unbind("contextmenu");
-    this.jspInit.unbind("connection");
+    // this.jspInit.unmakeEverySource();
+    // this.jspInit.unmakeEveryTarget();
+    // this.jspInit.unbind("click");
+    // this.jspInit.unbind("contextmenu");
+    // this.jspInit.unbind("connection");
     this.jspInit = null;
   },
 };

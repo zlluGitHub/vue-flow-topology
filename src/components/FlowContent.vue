@@ -189,7 +189,7 @@ export default {
         top: offsetY,
         left: offsetX,
       };
-      this.$store.commit("setFlowData", JSON.parse(JSON.stringify(flowConfig)));
+      this.$store.commit("setFlowData", flowConfig);
       this.$refs.flowArea.initFlowCanvas();
     },
     // 滚轮滚动事件

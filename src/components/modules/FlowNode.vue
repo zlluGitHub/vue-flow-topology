@@ -71,7 +71,6 @@ export default {
             item.y = y;
           }
         });
-        this.$store.commit("setFlowData", flowData);
         this.$store.commit("setFlowStepData", flowData);
       }
     },
