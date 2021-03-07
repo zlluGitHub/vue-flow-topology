@@ -29,25 +29,20 @@
 ### 演示地址
 - → 在线 Demo 预览：[http://flow.zhenglinglu.cn](http://flow.zhenglinglu.cn)
 ### 快速使用
-
-#### clone this project
 ```bash
+# clone this project
 git clone https://github.com/zlluGitHub/vue-flow-topology.git
-```
-#### Project setup
-```bash
+
+# Project setup
 npm install
-```
-#### Compiles and hot-reloads for development
-```bash
+
+# Compiles and hot-reloads for development
 npm run dev
-```
-#### Compiles and minifies for production
-```bash
+
+# Compiles and minifies for production
 npm run build
-```
-#### Lints and fixes files
-```bash
+
+# Lints and fixes files
 npm run lint
 ```
 #### 示例图片
@@ -57,25 +52,20 @@ npm run lint
 ### 演示地址
 - → 在线 Demo 预览：[http://flow.zhenglinglu.cn/simple.html](http://flow.zhenglinglu.cn/simple.html)
 ### 快速使用
-
-#### clone this project
 ```bash
+# clone this project
 git clone -b simple https://github.com/zlluGitHub/vue-flow-topology.git
-```
-#### Project setup
-```bash
+
+# Project setup
 npm install
-```
-#### Compiles and hot-reloads for development
-```bash
+
+# Compiles and hot-reloads for development
 npm run dev
-```
-#### Compiles and minifies for production
-```bash
+
+# Compiles and minifies for production
 npm run build
-```
-#### Lints and fixes files
-```bash
+
+# Lints and fixes files
 npm run lint
 ```
 #### 示例图片
